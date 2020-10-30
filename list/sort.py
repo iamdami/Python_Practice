@@ -35,7 +35,7 @@ def ascendingSort(list, N):
 
 
 # read file
-with open('C:/Users/Dami/Desktop/python/3.txt', 'r') as ascending:
+with open('putFileName.txt', 'r') as ascending:
     # Read data value based on comma and save it in list
     list = [int(float(i)) for i in ascending.read().split(',')]
     
