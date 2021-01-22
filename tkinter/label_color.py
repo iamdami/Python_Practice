@@ -1,0 +1,10 @@
+from tkinter import *
+rt = Tk()
+rt.geometry("500x300")
+lable1= Label(rt, text="apple", fg="white", bg="blue")
+lable1.pack()
+lable2= Label(rt, text="banana", fg="gray", bg="yellow")
+lable2.pack(fill=X)
+lable3= Label(rt, text="melon", fg="purple", bg="lightgreen")
+lable3.pack(side=RIGHT, fill=Y)
+rt.mainloop()
