@@ -1,0 +1,114 @@
+2장
+
+"Hello, world! \t\t\n".strip()
+---------------------------------------
+
+
+"Hello, world!".split() # Hello,와 world! 사이에 공백이 2개 있다.
+---------------------------------------
+
+
+"Hello, world!".split(" ") # Hello,와 world! 사이에 공백이 2개 있다.
+---------------------------------------
+
+
+"www.networksciencelab.com".split(".")
+---------------------------------------
+
+
+", ".join(["alpha", "bravo", "charlie", "delta"])
+---------------------------------------
+
+
+"-".join("1.617.305.1985".split("."))
+---------------------------------------
+
+
+" ".join("This string\n\r has many\t\tspaces".split())
+---------------------------------------
+
+
+"www.networksciencelab.com".find(".com")
+---------------------------------------
+
+
+"www.networksciencelab.com".count(".")
+---------------------------------------
+
+
+seq = ["alpha", "bravo", "charlie", "delta"]
+dict(enumerate(seq))
+---------------------------------------
+
+
+kseq = "abcd" # 문자열 또한, 순서열이다.
+vseq = ["alpha", "bravo", "charlie", "delta"]
+dict(zip(kseq, vseq))
+---------------------------------------
+
+
+from collections import Counter
+phrase = "a man a plan a canal panama"
+cntr = Counter(phrase.split())
+cntr.most_common()
+---------------------------------------
+
+
+cntrDict = dict(cntr.most_common())
+cntrDict
+---------------------------------------
+
+
+cntrDict['a']
+---------------------------------------
+
+
+import urllib.parse
+URL = "http://networksciencelab.com/index.html;param?foo=bar#content"
+urllib.parse.urlparse(URL)
+---------------------------------------
+
+
+
+import re
+re.split(r"\W", "Hello, world!")
+---------------------------------------
+
+
+# 인근에 위치한 비문자(non-letter)를 합친다.
+re.split(r"\W+", "Hello, world!")
+---------------------------------------
+
+
+mo = re.match(r"\d+", "067 Starts with a number")
+mo
+---------------------------------------
+
+
+mo.group()
+---------------------------------------
+
+
+print(re.match(r"\d+", "Does not start with a number"))
+---------------------------------------
+
+
+re.search(r"[a-z]+", "0010010 Has at least one 010 letter 0010010", re.I)
+---------------------------------------
+
+
+# 대소문자를 구분하는 버전
+re.search(r"[a-z]+", "0010010 Has at least one 010 letter 0010010")
+---------------------------------------
+
+
+re.findall(r"[a-z]+", "0010010 Has at least one 010 letter 0010010", re.I)
+---------------------------------------
+
+
+re.sub(r"[a-z ]+", "[...]", "0010010 has at least one 010 letter 0010010")
+---------------------------------------
+
+
+import glob
+glob.glob("*.txt")
