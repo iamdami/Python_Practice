@@ -1,0 +1,181 @@
+4장
+
+mysql -u root -p
+
+
+CREATE USER 'dsuser'@'localhost' IDENTIFIED BY 'badpassw0rd';
+
+
+CREATE DATABASE dsdb;
+
+
+GRANT ALL ON dsdb.* TO 'dsuser'@'localhost';
+
+
+mysql -u dsuser -p dsdb
+
+---------------------------------------
+
+
+USE dsdb;
+CREATE TABLE employee (empname TINYTEXT, salary FLOAT, hired DATE);
+---------------------------------------
+
+
+DROP TABLE employee;
+---------------------------------------
+
+
+CREATE TABLE employee (id INT PRIMARY KEY AUTO_INCREMENT,
+updated TIMESTAMP, empname TINYTEXT NOT NULL, salary FLOAT NOT NULL, hired DATE);
+---------------------------------------
+
+
+ALTER TABLE employee ADD INDEX(hired);
+---------------------------------------
+
+
+INSERT INTO employee VALUES(NULL,NULL,"John Smith",35000,NOW());
+
+
+SHOW WARNINGS;
+
+
+INSERT INTO employee VALUES(NULL,NULL,"John Smith",35000,NOW());
+
+
+INSERT IGNORE INTO employee VALUES(NULL,NULL,"John Smith",35000,NOW());
+---------------------------------------
+
+
+-- 모든 최근 입사자의 임금을 리셋한다.
+UPDATE employee SET salary=35000 WHERE hired=CURDATE();
+
+-- John Smith의 임금을 인상한다.
+UPDATE employee SET salary=salary+1000 WHERE empname="John Smith";
+---------------------------------------
+
+
+SELECT empname,salary FROM employee WHERE empname="John Smith";
+
+
+SELECT empname,salary FROM employee;
+
+
+SELECT*FROM employee WHERE hired>= '2000-01-01' ORDER BY salary DESC;
+---------------------------------------
+
+
+SELECT(hired>'2001-01-01') AS Recent, AVG (salary) FROM employee
+GROUP BY (hired>'2001-01-01');
+---------------------------------------
+
+
+SELECT AVG(salary),MIN(hired),MAX(hired) FROM employee
+GROUP BY YEAR(hired)
+HAVING MIN(hired)>'2001-01-01';
+---------------------------------------
+
+
+-- 테이블을 만들고 자료를 재워 넣는다.
+CREATE TABLE position (eid INT, description TEXT);
+INSERT INTO position (eid,description) VALUES (6,'Imposter'),
+  (1,'Accountant'),(4,'Programmer'),(5,'President');
+ALTER TABLE position ADD INDEX(eid);
+
+-- 결합한 데이터를 불러온다.
+SELECT employee.empname,position.description
+FROM employee,position WHERE employee.id=position.eid
+ORDER BY position.description;
+---------------------------------------
+
+
+import pymysql
+conn = pymysql.connect(host="localhost", port=3306,
+  user="dsuser", passwd="badpassw0rd", db="dsdb")
+cur = conn.cursor()
+
+---------------------------------------
+
+
+query = '''
+SELECT employee.empname,position.description
+FROM employee,position WHERE employee.id=position.eid
+ORDER BY position.description
+'''
+n_rows = cur.execute(query)
+---------------------------------------
+
+
+results = list(cur.fetchall())
+results
+---------------------------------------
+
+import pymongo as mongo
+
+# 기본 클라이언트 설정
+client1 = mongo.MongoClient()
+
+# 호스트와 포트를 지정
+client2 = mongo.MongoClient("localhost", 27017)
+
+# URL로 호스트와 포트를 지정
+client3 = mongo.MongoClient("mongodb://localhost:27017/")
+---------------------------------------
+
+
+person1 = {"empname" : "John Smith", "dob" : "1957-12-24"}
+person2 = {"_id" : "XVT162", "empname" : "Jane Doe", "dob" : "1964-05-16"}
+person_id1 = people.insert_one(person1).inserted_id
+person_id1
+---------------------------------------
+
+
+# 새로운 “_id” 필드가 생겼다!
+person1
+---------------------------------------
+
+
+#  _id 키를 명확히 지정했으므로 키가 자동 생성되지 않는다.
+person_id2 = people.insert_one(person2).inserted_id
+person_id2
+---------------------------------------
+
+
+persons = [{"empname" : "Abe Lincoln", "dob" : "1809-02-12"}, {"empname" : "Anon I. Muss"}]
+result = people.insert_many(persons)
+result.inserted_ids
+---------------------------------------
+
+
+
+everyone = people.find()
+list(everyone)
+---------------------------------------
+
+
+list(people.find({"dob" : "1957-12-24"}))
+---------------------------------------
+
+
+people.find_one()
+
+
+people.find_one({"empname" : "Abe Lincoln"}) 
+
+
+people.find_one({"_id" : "XVT162"})
+---------------------------------------
+
+
+people.count()
+
+
+people.find({"dob": "1957-12-24"}).count()
+
+
+people.find().sort("dob")
+
+
+result = people.delete_many({"dob" : "1957-12-24"}) 
+result.deleted_count
