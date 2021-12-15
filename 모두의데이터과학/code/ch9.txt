@@ -1,0 +1,73 @@
+9장
+
+내려받은 예제 파일에 실습을 위한 multi.txt 파일이 있습니다.
+
+multi.txt 파일을 참고합니다.
+---------------------------------------
+
+
+alco.index = multi
+
+
+beer_seriesNY = alco.ix['New York']['Beer'] 
+beer_seriesCA = alco.ix['California']['Beer']
+
+
+
+beer_seriesNY.corr(beer_seriesCA)
+
+
+beer_seriesCA.cov(beer_seriesNY)
+
+
+[x.skew() for x in (beer_seriesCA, beer_seriesNY)]
+
+
+frameNY = alco.ix['New York'] 
+frameNY.skew()
+
+
+frameNY.corr() # 모든 열 쌍의 상관성을 계산한다.
+
+
+frameNY.cov() # 모든 열 쌍의 공분산을 계산한다.
+---------------------------------------
+
+
+pop = pd.read_csv(“population2000-2009.csv”, index_col=”State”)
+
+
+# 마지막 2줄을 제거한다: 이들은 미래의 추정치다.
+pop_seriesNY = pop.ix["New York"][:-2]
+pop_seriesNY.index
+
+
+# 인덱스가 object로 되어 있으므로, Int로 타입을 변경한다.
+pop_seriesNY.index = pop_seriesNY.index.map(int)
+
+
+frameNY.ix[range(2000:2009)].corrwith(pop_seriesNY)
+
+
+
+from scipy.stats import pearsonr
+
+# 인덱스를 수동으로 정렬한다.
+pop_sorted = pop_seriesNY.sort_index()
+alco_10 = alco.ix['New York'][-10:]
+
+
+# 모든 상관성과 p값을 계산하기 위해 리스트 내포를 사용한다. 
+corrs = [(bev,) + pearsonr(alco_10[bev], pop_sorted) 
+         for bev in alco_10.columns]
+
+
+# 리스트를 데이터 프레임으로 변환한다.
+pd.DataFrame(corrs, columns=("bev", "r", "p-value")).set_index("bev")
+
+
+
+alco2009.corr()
+
+
+pearsonr(alco2009["Wine"], alco2009["Beer"])
